@@ -1,38 +1,39 @@
+//Create a class for carousel
 class Carousel {
-    constructor(carousel) {
-        this.carousel = carousel;
-        this.imgs = this.carousel.querySelectorAll("img");
-        this.leftBtn = this.carousel.querySelector(".left-button");
-        this.rightBtn = this.carousel.querySelector(".right-button");
+    //USe the constructor to pass in each image
+    constructor (image) {
+        this.image = image;
+        this.lButton = this.image.querySelector('.left-button');
+        this.rButton = this.image.querySelector('.right-button');
+        this.images = this.image.querySelectorAll('img');
         this.index = 0;
-        this.imgs[this.index].style.display = "block";
+        this.lastIndex = 0;
 
-        this.rightBtn.addEventListener("click", () => this.toggleRight());
-        this.leftBtn.addEventListener("click", () => this.toggleLeft());
+        this.images.forEach(img => img.classList.remove('current-img'));
+        this.images[0].classList.add('current-img');
+
+        this.lButton.addEventListener('click', () => this.scroll(-1));
+        this.rButton.addEventListener('click', () => this.scroll(+1));
     }
-    toggleRight() {
-        this.imgs[this.index].style.display = "none";
 
-        if (this.index ===  this.imgs.length-1) {
-            this.index = 0;
-        } else {
-            this.index++
+    scroll(inc) {
+        this.lastIndex = this.index;
+        this.index += inc;
+        this.index = this.index % this.images.length;
+        if (this.index < 0) {
+            this.index += this.images.length;
         }
-        this.imgs[this.index].style.display = "block";
+
+        this.moveAlong();
     }
 
-    toggleLeft() {
-        this.imgs[this.index].style.display = "none";
-
-        if (this.index === 0) {
-            this.index = this.imgs.length -1;
-        } else {
-            this.index--;
-        }
-        this.imgs[this.index].style.display = "block";
+    moveAlong() {
+        this.images.forEach(img => img.classList.remove('current-img'));
+        this.images[this.index].classList.add('current-img');
     }
-
 }
+let carousel = new Carousel(document.querySelector('.carousel'));
+
 /* If You've gotten this far, you're on your own! Although we will give you some hints:
     1. You will need to grab a reference to the carousel, and in it grab the left and right buttons
     2. You will need to grab a reference to all of the images
